@@ -8,16 +8,15 @@ import MaterialInput from './components/Material-input.vue';
 import FaceComparaison from './components/FaceComparaison.vue';
 
 const routes = [
-  { path: '/inscription', component: Inscription },
-  { path: '/connexion', component: Connexion },
-  { path: '/material', component: MaterialInput },
-  { path: '/facecompare', component: FaceComparaison }
-
+	{ path: '/inscription', component: Inscription },
+	{ path: '/connexion', component: Connexion },
+	{ path: '/material', component: MaterialInput },
+	{ path: '/facecompare', component: FaceComparaison },
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes
+	history: createWebHistory(),
+	routes,
 });
 
 createApp(App).use(router).use(store).mount('#app');
