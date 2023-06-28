@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import App from './App.vue';
 import store from './store';
+import '../src/assets/css/tailwind.css'
 import Inscription from './components/Inscription.vue';
 import Connexion from './components/Connexion.vue';
 import MaterialInput from './components/Material-input.vue';
