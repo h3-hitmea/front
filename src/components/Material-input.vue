@@ -1,13 +1,16 @@
 <template>
 	<div id="material-input">
 		<h1>Saisie du matériel</h1>
-		<div class="material-list">
-			<div v-for="item in materials" :key="item.id" class="material-item">
-				<input type="checkbox" :id="item.id" v-model="item.selected" />
-				<label :for="item.id">{{ item.name }}</label>
-			</div>
+		<div class="material-list" v-for="item in materials"
+			:key="item.id">
+			<input type="checkbox"
+				:id="item.id"
+				v-model="item.selected"
+				@change="handleChange(item)"
+				:disabled="item.quantity === 0" />
+			<label :for="item.id"
+				:class="{ 'grayed-out': item.quantity === 0 }">{{ item.name }} ({{ item.quantity }})</label>
 		</div>
-		<button @click="submitMaterials">Soumettre</button>
 	</div>
 </template>
 
@@ -77,23 +80,29 @@ button:hover {
 			const materials = ref([]);
 			const store = useStore();
 			const authToken = store.state.authToken;
-			const submitMaterials = async () => {
-				const selectedMaterials = materials.value
-					.filter(item => item.selected)
-					.map(item => ({
-						materialId: item.id,
-					}));
-				try {
-					const response = await api.post('v1/user-material/create', selectedMaterials, {
+			const handleChange = async (item) => {
+				const dataToSend = {
+					materialId: item.id
+				};
+				if (item.selected) {
+					// Si l'élément est sélectionné, créez-le et décrémentez la quantité
+					await api.post('v1/user-material/create', dataToSend, {
 						headers: {
-							Authorization: `Bearer ${authToken}`,
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${authToken}`,
 						},
 					});
-					console.log(response.data);
-					// Ici, vous pouvez gérer la réponse de l'API après l'ajout des user-materials
-				} catch (error) {
-					console.error(error);
-					// Ici, vous pouvez gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
+					item.quantity--;
+				} else {
+					// Si l'élément n'est pas sélectionné, supprimez-le et augmentez la quantité
+					await api.delete('v1/user-material/delete', {
+						headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${authToken}`,
+						},
+						data: dataToSend,
+					});
+					item.quantity++;
 				}
 			};
 			onMounted(async () => {
@@ -104,24 +113,29 @@ button:hover {
 							Authorization: `Bearer ${authToken}`,
 						},
 					});
-					materials.value = allMaterials.data;
-					// Cocher les items possédés par l'utilisateur
+					materials.value = allMaterials.data.sort((a, b) => a.name.localeCompare(b.name));
 					allUserMaterials.data.forEach(userMaterial => {
-						const material = materials.value.find(item => item.id === userMaterial.id);
+						const material = materials.value.find(item => item.id === userMaterial
+							.materialId);
 						if (material) {
 							material.selected = true;
 						}
 					});
 				} catch (error) {
 					console.error(error);
-					// Ici, vous pouvez gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
 				}
 			});
 			return {
 				materials,
-				submitMaterials,
+				handleChange,
 				authToken,
 			};
 		},
 	};
 </script>
+
+<style>
+	.grayed-out {
+		color: gray;
+	}
+</style>
