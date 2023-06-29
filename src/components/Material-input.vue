@@ -1,15 +1,11 @@
 <template>
 	<div id="material-input">
 		<h1>Saisie du matériel</h1>
-		<div class="material-list" v-for="item in materials"
-			:key="item.id">
-			<input type="checkbox"
-				:id="item.id"
-				v-model="item.selected"
-				@change="handleChange(item)"
-				:disabled="item.quantity === 0" />
-			<label :for="item.id"
-				:class="{ 'grayed-out': item.quantity === 0 }">{{ item.name }} ({{ item.quantity }})</label>
+		<div class="material-list">
+			<div class="material-item" v-for="item in materials" :key="item.id">
+				<input type="checkbox" :id="item.id" v-model="item.selected" @change="handleChange(item)" :disabled="item.quantity === 0" />
+				<label :for="item.id" :class="{ 'grayed-out': item.quantity === 0 }">{{ item.name }} ({{ item.quantity }})</label>
+			</div>
 		</div>
 	</div>
 </template>
@@ -26,17 +22,16 @@ h1 {
 	font-size: 24px;
 	margin-bottom: 20px;
 }
-
 .material-list {
-	display: grid;
-	grid-template-columns: auto;
-	grid-gap: 10px;
-}
+		display: flex;
+		flex-direction: column;
+	}
 
 .material-item {
-	display: flex;
-	align-items: center;
-}
+		display: flex;
+		align-items: center;
+		margin-bottom: 10px;
+	}
 
 input[type="checkbox"] {
 	margin-right: 10px;
