@@ -2,44 +2,52 @@
 	<div id="app">
 		<header>
 			<router-link to="/">
-				<img
-					src="../public/MaxAirain2.png"
+				<img src="../public/MaxAirain2.png"
 					alt="Logo"
-					class="logo"
-				/>
+					class="logo" />
 			</router-link>
 			<div class="title-container">
-					<h1 class="title">Max Airain</h1>
-				</div>
+				<h1 class="title">Max Airain</h1>
+			</div>
 			<div class="header-right">
-				
+
 				<nav v-if="!authToken">
-					<router-link
-						to="/inscription"
+					<router-link to="/inscription"
 						class="nav-button"
-						:class="{ 'nav-button-active': $route.path === '/inscription' }"
-					>
+						:class="{ 'nav-button-active': $route.path === '/inscription' }">
 						S'inscrire
 					</router-link>
-					<router-link
-						to="/connexion"
+					<router-link to="/connexion"
 						class="nav-button"
-						:class="{ 'nav-button-active': $route.path === '/connexion' }"
-					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
+						:class="{ 'nav-button-active': $route.path === '/connexion' }">
+						<svg xmlns="http://www.w3.org/2000/svg"
 							width="16"
 							height="16"
 							fill="currentColor"
 							class="bi bi-person-fill"
-							viewBox="0 0 16 16"
-						>
-							<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+							viewBox="0 0 16 16">
+							<path
+								d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
 						</svg>
 						Se connecter
 					</router-link>
 				</nav>
-				<div class="welcome" v-else>Bienvenue</div>
+				<div class="welcome"
+					v-else>
+					<button class="nav-button"
+						@click="logout">
+						<svg xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							fill="currentColor"
+							class="bi bi-person-fill"
+							viewBox="0 0 16 16">
+							<path
+								d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+						</svg>
+						Déconnexion
+					</button>
+				</div>
 			</div>
 		</header>
 		<router-view />
@@ -47,17 +55,32 @@
 </template>
 
 <script>
-	import { defineComponent, computed } from 'vue';
-	import { useStore } from 'vuex';
-	
+	import {
+		useRouter
+	} from 'vue-router';
+	import {
+		defineComponent,
+		computed,
+	} from 'vue';
+	import {
+		useStore
+	} from 'vuex';
+
 	export default defineComponent({
 		name: 'App',
 		setup() {
+			const router = useRouter();
 			const store = useStore();
 			const authToken = computed(() => store.state.authToken);
-			
+			const logout = () => {
+				store.commit('SET_AUTH_TOKEN', null);
+				localStorage.removeItem('authToken');
+				router.push('/');
+			};
+
 			return {
-				authToken
+				authToken,
+				logout
 			};
 		}
 	});

@@ -11,23 +11,27 @@
 	const router = useRouter();
 	const email = ref('');
 	console.log(process.env.VUE_APP_API_URL);
-	const submitForm = async () => {
-		const {
-			descriptor
-		} = await getFacialInformation();
-		const descriptorToString = JSON.stringify(Array.from(descriptor));
-		try {
-			const response = await api.post('v1/user', {
-				email: email.value,
-				descriptor: descriptorToString,
-			});
-			console.log(response.data);
-			router.push('/connexion');
-		} catch (error) {
-			console.error(error);
-			// Ici, vous pouvez gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
+const submitForm = async () => {
+	const { descriptor } = await getFacialInformation();
+	const descriptorToString = JSON.stringify(Array.from(descriptor));
+	try {
+		const response = await api.post('v1/user', {
+			email: email.value,
+			descriptor: descriptorToString,
+		});
+		console.log(response.data);
+		router.push('/connexion');
+	} catch (error) {
+		console.error(error);
+		// Ici, vous pouvez gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
+		if (error.response && error.response.data && error.response.data.message === "PrismaClientKnownRequestError: \nInvalid `prisma.user.create()` invocation:\n\n\nUnique constraint failed on the fields: (`email`)") {
+			alert('Cet email est déjà utilisé');
+		} else {
+			alert('Une erreur est survenue');
 		}
-	};
+	}
+};
+
 	const videoRef = ref(null);
 	const canvasRef = ref(null);
 	const image = ref(null);

@@ -21,14 +21,16 @@ const submitForm = async () => {
 
 		console.log(response.data);
 		store.commit('SET_AUTH_TOKEN', response.data.token);
-    router.push('/material');
-
+		// Stocker le token dans le localStorage
+		localStorage.setItem('authToken', response.data.token);
+		router.push('/material');
 
 	} catch (error) {
 		console.error(error);
-		// Ici, vous pouvez gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
+		alert("Visage non reconnu")
 	}
 };
+
 
 const videoRef = ref(null);
 const canvasRef = ref(null);

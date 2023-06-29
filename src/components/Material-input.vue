@@ -3,8 +3,8 @@
 		<h1>Saisie du matériel</h1>
 		<div class="material-list">
 			<div class="material-item" v-for="item in materials" :key="item.id">
-				<input type="checkbox" :id="item.id" v-model="item.selected" @change="handleChange(item)" :disabled="item.quantity === 0" />
-				<label :for="item.id" :class="{ 'grayed-out': item.quantity === 0 }">{{ item.name }} ({{ item.quantity }})</label>
+				<input type="checkbox" :id="item.id" v-model="item.selected" @change="handleChange(item)" :disabled="item.quantity === 0 && !item.selected" />
+				<label :for="item.id" :class="{ 'grayed-out': item.quantity === 0 && !item.selected }">{{ item.name }} ({{ item.quantity }})</label>
 			</div>
 		</div>
 	</div>
