@@ -65,7 +65,6 @@
 	import {
 		useStore
 	} from 'vuex';
-
 	export default defineComponent({
 		name: 'App',
 		setup() {
@@ -77,7 +76,6 @@
 				localStorage.removeItem('authToken');
 				router.push('/');
 			};
-
 			return {
 				authToken,
 				logout
@@ -143,6 +141,11 @@
 
 	.nav-button-active {
 		background-color: #379EC1;
+		color: white;
+	}
+
+	.welcome .nav-button:hover {
+		background-color: red;
 		color: white;
 	}
 
