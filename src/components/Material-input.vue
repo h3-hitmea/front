@@ -1,16 +1,67 @@
 <template>
 	<div id="material-input">
 		<h1>Saisie du matériel</h1>
-		<div v-for="item in materials"
-			:key="item.id">
-			<input type="checkbox"
-				:id="item.id"
-				v-model="item.selected" />
-			<label :for="item.id">{{ item.name }}</label>
+		<div class="material-list">
+			<div v-for="item in materials" :key="item.id" class="material-item">
+				<input type="checkbox" :id="item.id" v-model="item.selected" />
+				<label :for="item.id">{{ item.name }}</label>
+			</div>
 		</div>
 		<button @click="submitMaterials">Soumettre</button>
 	</div>
 </template>
+
+<style scoped>
+#material-input {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-top: 50px;
+}
+
+h1 {
+	font-size: 24px;
+	margin-bottom: 20px;
+}
+
+.material-list {
+	display: grid;
+	grid-template-columns: auto;
+	grid-gap: 10px;
+}
+
+.material-item {
+	display: flex;
+	align-items: center;
+}
+
+input[type="checkbox"] {
+	margin-right: 10px;
+}
+
+label {
+	font-size: 16px;
+	cursor: pointer;
+}
+
+button {
+	margin-top: 20px;
+	padding: 10px 20px;
+	font-size: 16px;
+	color: #fff;
+	background-color: #379EC1;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+button:hover {
+	background-color: #50b6d8;
+}
+</style>
+
 
 <script>
 	import {
