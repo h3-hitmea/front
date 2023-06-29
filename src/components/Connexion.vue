@@ -1,8 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import api from '../config/api';
 import * as faceapi from 'face-api.js';
+import { useStore } from 'vuex'; 
 
+const router = useRouter(); 
+const store = useStore();
 const email = ref('');
 console.log(process.env.VUE_APP_API_URL);
 
@@ -16,7 +20,10 @@ const submitForm = async () => {
 		});
 
 		console.log(response.data);
-		// Ici, vous pouvez gérer la réponse de l'API, par exemple rediriger l'utilisateur vers une autre page
+		store.commit('SET_AUTH_TOKEN', response.data.token);
+    router.push('/material');
+
+
 	} catch (error) {
 		console.error(error);
 		// Ici, vous pouvez gérer les erreurs, par exemple afficher un message d'erreur à l'utilisateur
